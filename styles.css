@@ -1,9 +1,0 @@
-:root {
-  --fontsize: 18px;
-  --fontcolor: #ff0000;
-}
-
-body {
-  font-size: var(--fontsize);
-  color: var(--fontcolor);
-}
