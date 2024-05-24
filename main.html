@@ -1,25 +1,10 @@
 <!DOCTYPE html>
-
 <html>
   <head>
-<!--     <link rel="stylesheet" href="styles.css" /> -->
-	  
+    <link rel="stylesheet" href="styles.css" />
   </head>
-<style>
-	:root {
-  --fontsize: 16px;
-  --fontcolor: #000000;
-}
-
-body {
-  font-size: var(--fontsize);
-  color: var(--fontcolor);
-}
-
-</style>
   <body>
-    <!-- the entire body must be written by student -->
-    <form>
+    <form id="preferencesForm">
       <label for="fontsize">Font Size:</label>
       <input
         type="number"
@@ -36,6 +21,57 @@ body {
       <input type="submit" value="Save" />
     </form>
 
-    <script type="text/javascript" src="./script.js"></script>
+    <script>
+      // Function to set cookie
+      function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+          expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+      }
+
+      // Function to get cookie
+      function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == " ") c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) == 0)
+            return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+      }
+
+      // Function to handle form submission
+      document.getElementById("preferencesForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
+        var fontSize = document.getElementById("fontsize").value;
+        var fontColor = document.getElementById("fontcolor").value;
+
+        // Set cookies for preferences
+        setCookie("fontSize", fontSize, 365);
+        setCookie("fontColor", fontColor, 365);
+
+        // Apply preferences immediately
+        document.body.style.fontSize = fontSize + "px";
+        document.body.style.color = fontColor;
+      });
+
+      // Function to apply saved preferences on page load
+      window.onload = function () {
+        var fontSize = getCookie("fontSize");
+        var fontColor = getCookie("fontColor");
+        if (fontSize) {
+          document.body.style.fontSize = fontSize + "px";
+        }
+        if (fontColor) {
+          document.body.style.color = fontColor;
+        }
+      };
+    </script>
   </body>
 </html>
