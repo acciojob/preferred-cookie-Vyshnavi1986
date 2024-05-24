@@ -1,35 +1,33 @@
 //your JS code here. If required.
-// Get form elements
-const fontSizeInput = document.getElementById("fontsize");
-const fontColorInput = document.getElementById("fontcolor");
-const saveButton = document.querySelector("input[type='submit']");
+const fontSize = getCookie("fontSize");
+    const color = getCookie("color");
+    if (fontSize) {
+      document.body.style.fontSize = fontSize;
+      document.getElementById("fontsize").value = fontSize;
+    }
+    if (color) {
+      document.body.style.color = color;
+      document.getElementById("color").value = color;
+    }
 
-// Load saved preferences from cookies
-if (document.cookie) {
-  const preferences = document.cookie.split(";").reduce((acc, cookie) => {
-    const [key, value] = cookie.split("=");
-    acc[key.trim()] = value.trim();
-    return acc;
-  }, {});
+    // Function to set user's preferences as cookies
+    function setPreferences() {
+      const fontSize = document.getElementById("fontsize").value + "px";
+      const color = document.getElementById("color").value;
+      document.body.style.fontSize = fontSize;
+      document.body.style.color = color;
+      document.cookie = "fontSize=" + fontSize + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+      document.cookie = "color=" + color + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+    }
 
-  if (preferences.fontSize) {
-    fontSizeInput.value = preferences.fontSize;
-    document.documentElement.style.setProperty("--fontsize", preferences.fontSize + "px");
-  }
-
-  if (preferences.fontColor) {
-    fontColorInput.value = preferences.fontColor;
-    document.documentElement.style.setProperty("--fontcolor", preferences.fontColor);
-  }
-}
-
-// Save preferences to cookies on form submit
-saveButton.addEventListener("click", (event) => {
-  event.preventDefault();
-  const fontSize = fontSizeInput.value;
-  const fontColor = fontColorInput.value;
-  document.documentElement.style.setProperty("--fontsize", fontSize + "px");
-  document.documentElement.style.setProperty("--fontcolor", fontColor);
-  document.cookie = `fontSize=${fontSize}; expires=${new Date(Date.now() + 86400000).toUTCString()}`;
-  document.cookie = `fontColor=${fontColor}; expires=${new Date(Date.now() + 86400000).toUTCString()}`;
-});
+    // Function to retrieve a cookie by name
+    function getCookie(name) {
+      const cookies = document.cookie.split("; ");
+      for (let i = 0; i < cookies.length; i++) {
+        const parts = cookies[i].split("=");
+        if (parts[0] === name) {
+          return parts[1];
+        }
+      }
+      return null;
+    }
